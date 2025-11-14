@@ -22,11 +22,19 @@ const log = (m) => ($("#log").textContent += ( ($("#log").textContent === "—" 
 // Mostramos el estado inicial del permiso
 $("#perm").textContent = Notification.permission;
 
-// Registramos el Service Worker que manejará las notificaciones en segundo plano
+// Registramos el Service Worker - RUTA CORREGIDA
 let swReg;
 if ('serviceWorker' in navigator) {
-  swReg = await navigator.serviceWorker.register('/notificaciones_push/firebase-messaging-sw.js');
-  console.log('SW registrado:', swReg.scope);
+  try {
+    // Usa la ruta correcta para GitHub Pages
+    swReg = await navigator.serviceWorker.register('./firebase-messaging-sw.js', {
+      scope: './'
+    });
+    console.log('SW registrado:', swReg.scope);
+  } catch (error) {
+    console.error('Error registrando SW:', error);
+    log("Error registrando Service Worker: " + error.message);
+  }
 }
 
 // Verificamos si el navegador soporta FCM
